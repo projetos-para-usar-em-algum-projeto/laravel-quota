@@ -1,0 +1,70 @@
+{
+    "name": "zaber-dev/laravel-quota",
+    "description": "Driver-based quota management for Laravel with time-period tracking, cache and database storage, Eloquent integration, middleware, and a fluent builder API.",
+    "keywords": [
+        "laravel",
+        "laravel-package",
+        "quota",
+        "quotas",
+        "usage-limit",
+        "rate-limit",
+        "period-limit",
+        "middleware",
+        "eloquent",
+        "cache",
+        "database",
+        "redis"
+    ],
+    "homepage": "https://github.com/zaber-dev/laravel-quota",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Md Mahedi Zaman Zaber",
+            "role": "Developer"
+        }
+    ],
+    "require": {
+        "php": "^8.2",
+        "illuminate/cache": "^11.0|^12.0|^13.0",
+        "illuminate/contracts": "^11.0|^12.0|^13.0",
+        "illuminate/database": "^11.0|^12.0|^13.0",
+        "illuminate/support": "^11.0|^12.0|^13.0"
+    },
+    "require-dev": {
+        "mockery/mockery": "^1.6",
+        "orchestra/testbench": "^9.0|^10.0|^11.0",
+        "phpunit/phpunit": "^10.5|^11.0|^12.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "ZaberDev\\Quota\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "ZaberDev\\Quota\\Tests\\": "tests/"
+        }
+    },
+    "scripts": {
+        "test": "vendor/bin/phpunit",
+        "test-coverage": "vendor/bin/phpunit --coverage-html coverage"
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "ZaberDev\\Quota\\QuotaServiceProvider"
+            ],
+            "aliases": {
+                "Quota": "ZaberDev\\Quota\\Facades\\Quota"
+            }
+        }
+    },
+    "config": {
+        "sort-packages": true,
+        "allow-plugins": {
+            "pestphp/pest-plugin": true
+        }
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true
+}

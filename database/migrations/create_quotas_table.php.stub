@@ -1,0 +1,34 @@
+<?php
+
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+
+return new class extends Migration
+{
+    public function up(): void
+    {
+        $tableName = config('quotas.drivers.database.table', 'quotas');
+
+        Schema::create($tableName, function (Blueprint $table) {
+            $table->id();
+            $table->string('key')->index();
+            $table->string('action')->index();
+            $table->nullableMorphs('target');
+            $table->unsignedBigInteger('used')->default(0);
+            $table->unsignedBigInteger('limit')->nullable();
+            $table->timestamp('period_start')->nullable()->index();
+            $table->timestamp('period_end')->nullable()->index();
+            $table->timestamps();
+
+            $table->unique(['key', 'period_start', 'period_end'], 'quotas_key_period_unique');
+        });
+    }
+
+    public function down(): void
+    {
+        $tableName = config('quotas.drivers.database.table', 'quotas');
+
+        Schema::dropIfExists($tableName);
+    }
+};
