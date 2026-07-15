@@ -41,6 +41,12 @@ class QuotaServiceProvider extends ServiceProvider
             $this->publishes([
                 __DIR__ . '/../database/migrations/create_quotas_table.php.stub' => $this->getMigrationFileName('create_quotas_table.php'),
             ], 'quotas-migrations');
+
+            $this->publishes([
+                __DIR__ . '/../resources/boost/skills/laravel-quota' => $this->app->basePath('.ai/skills/laravel-quota'),
+            ], ['quotas-skill', 'quotas-boost-skills']);
+
+            $this->autoPublishBoostSkill();
         }
 
         $this->registerMiddleware();
@@ -55,6 +61,26 @@ class QuotaServiceProvider extends ServiceProvider
         $router = $this->app->make(Router::class);
 
         $router->aliasMiddleware('quota', CheckQuota::class);
+    }
+
+    /**
+     * Automatically publish or synchronize the package AI skill when Laravel Boost is installed.
+     */
+    protected function autoPublishBoostSkill(): void
+    {
+        $boostDetected = class_exists(\Laravel\Boost\BoostServiceProvider::class)
+            || is_dir($this->app->basePath('.ai/skills'));
+
+        if (! $boostDetected) {
+            return;
+        }
+
+        $source = __DIR__ . '/../resources/boost/skills/laravel-quota';
+        $destination = $this->app->basePath('.ai/skills/laravel-quota');
+
+        if (is_dir($source) && ! is_dir($destination)) {
+            $this->app['files']->copyDirectory($source, $destination);
+        }
     }
 
     /**

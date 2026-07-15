@@ -58,6 +58,11 @@
             "aliases": {
                 "Quota": "ZaberDev\\Quota\\Facades\\Quota"
             }
+        },
+        "boost": {
+            "skills": [
+                "resources/boost/skills/laravel-quota"
+            ]
         }
     },
     "config": {
