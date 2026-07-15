@@ -336,6 +336,43 @@ You can listen to these in your `EventServiceProvider` for logging, monitoring, 
 
 ---
 
+## Agentic Development with Laravel Boost
+
+**Laravel Quota** includes built-in AI support and architectural skills engineered for [Laravel Boost](https://github.com/laravel/boost).
+
+When using AI coding assistants (such as Cursor, Claude Code, or GitHub Copilot connected via the Boost MCP server), your AI agent can automatically load specialized design patterns and exact API rules for implementing application-level quotas, usage budgets, and calendar-based usage limits with our package.
+
+### Automatic Skill Installation
+
+When Laravel Boost (`laravel/boost`) is installed in your application, the `laravel-quota` AI skill is **automatically discovered and published** during package installation and updates (`php artisan boost:install` or `php artisan boost:update`).
+
+If you install `zaber-dev/laravel-quota` into an existing Boost-enabled project, our service provider also automatically synchronizes the skill directly into your `.ai/skills/laravel-quota` directory on boot with zero configuration required.
+
+### Manual Skill Installation
+
+If you prefer to install or update the AI skill manually, you can use either of the following commands:
+
+```bash
+# Using Laravel Boost
+php artisan boost:add-skill zaber-dev/laravel-quota
+
+# Using Vendor Publish
+php artisan vendor:publish --tag=quotas-skill
+```
+
+### What the AI Skill Teaches Your Assistant
+
+By enabling our skill, your AI assistant will strictly follow package conventions, including:
+
+- Utilizing `Quota::for('action', $target)->block(...)` for atomic quota reservations, concurrency protection, and success-only quota consumption.
+- Applying `use ZaberDev\Quota\HasQuotas;` directly to Eloquent models (`$user->quota('pdf_exports')->limit(50)->perMonth()->consume()`).
+- Choosing the appropriate storage driver (`cache` for high-throughput transient quotas or `database` for persistent usage tracking and auditability).
+- Applying calendar-based quota periods (`perMinute()`, `perHour()`, `perDay()`, `perWeek()`, `perMonth()`, and `perYear()`) instead of implementing manual reset logic.
+- Enforcing route middleware (`middleware('quota:action,limit,period')`) that only consumes quota for successful (`2xx`/`3xx`) responses while respecting validation failures.
+- Handling `QuotaExceededException` (`HTTP 429`) and leveraging the `QuotaInfo` DTO for accurate usage, remaining quota, and period boundary information.
+
+---
+
 ## Related Packages
 
 This package is part of the **[ZaberDev Laravel Ecosystem](https://github.com/zaber-dev/laravel-ecosystem)** (Laravel Productivity Toolkit) — a cohesive suite of high-level application primitives engineered for concurrency, state management, and resource allocation.
